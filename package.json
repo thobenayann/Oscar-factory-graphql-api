@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "initDB": "dropdb -U postgres -p 5433 oscar-factory-db; createdb -U postgres -p 5433 oscar-factory-db; npm run resetDB",
+    "resetDB": "psql -U postgres -p 5433 -d oscar-factory-db -f ./data/structure.sql; psql -U postgres -p 5433 -d oscar-factory-db -f ./data/migration_favorite.sql; psql -U postgres -p 5433 -d oscar-factory-db -f ./data/data.sql; @powershell $env:DEBUG=seeding node data/generateMovieSeeding.js",
     "dev": "@powershell $env:DEBUG='*,-nodemon*,-express*,-body-parser*'; npx nodemon -e js,gql"
   },
   "repository": {
@@ -19,8 +21,18 @@
   "homepage": "https://github.com/thobenayann/Oscar-factory-graphql-api#readme",
   "dependencies": {
     "apollo-server": "^3.6.7",
+    "axios": "^0.26.1",
     "debug": "^4.3.4",
     "dotenv": "^16.0.0",
-    "pg": "^8.7.3"
+    "pg": "^8.7.3",
+    "faker": "^5.5.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.5.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0"
   }
 }
