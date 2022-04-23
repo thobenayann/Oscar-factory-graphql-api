@@ -1,0 +1,7 @@
+type Favorite {
+    id: PositiveInt!
+    created_at: DateTime!
+    updated_at: DateTime
+    movie: Movie!
+    user: User!
+}

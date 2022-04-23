@@ -1,12 +1,47 @@
-type Query{
+# Le type query est un type spécial
+# Chacune de ses propriétés va représenter un "point d'entrée" de notre API
+# Du quel on pourra faire partir nos requêtes
+"""
+Récupérer les données
+"""
+type Query {
+    # On donne un nom à notre point d'entrée, et on indique ce qu'il retourne
+    "Authentification"
+    signin(email: EmailAddress!, password: String!): UserConnected
 
-    # Maintenant dans le type Query, je peux utiliser le type d'entité (ou type complexe) que l'on a créer précédemment
-    # Ici on retounre une liste de categories
-    "Liste de toutes les catégories"
-    getAllCategories: [Category]
+    # Lors du chargement de l'accueil
+    "Liste des films"
+    getAllMovies(skip: PositiveInt, take: PositiveInt): [Movie!]!
 
-    # Afin de personaliser la récupération d'une entité, on peut fournir à la requête GraphQL des arguments
-    # Ces arguments sont typés, et peuvent être rendu obligatoire grâce au symbole !
-    getMovie(id: Int!): Movie
+    # Récupération avec ses reviews et ses catégories
+    "Récupération d'un film"
+    getMovie(id: PositiveInt!): Movie
 
+    # Sur la page ajout de film
+    "Recherche des films sur imdb"
+    searchImdb(searchTerm: String!): [ImdbSearchItem!]!
+
+    "Liste des catégories"
+    getAllCategories(skip: PositiveInt, take: PositiveInt): [Category!]!
+
+    "Récupération d'une catégorie"
+    getCategory(id: PositiveInt!): Category
+
+    "Liste des films d'une catégorie"
+    getMoviesByCategory(category_id: PositiveInt!): [Movie!]!
+
+    "Liste des critiques d'un utilisateur"
+    getReviewsByUser(user_id: PositiveInt!): [Review!]!
+
+    "Récupération d'un utilisateur via son ID"
+    user(id: PositiveInt!): User
+
+    "Type scalaire Year"
+    echoYear(year: Year!): Year!
+
+    "Récupération des favoris"
+    getMyFavoriteMovies: [Movie!]!
+
+    "Récupération des favoris"
+    getAllFavorites: [Favorite!]!
 }

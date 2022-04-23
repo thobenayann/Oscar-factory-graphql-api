@@ -1,0 +1,47 @@
+# Ceci est le schéma de présentation de nos données en GraphQL
+# On peut écrire des commentaires qui ne seront présent que dans le code avec #
+
+# On va d'abord définir nos "entités"
+
+"Les informations publiques d'un utilisateur"
+type User {
+    # Chaque propriété à un nom et un type + éventuellement des modificateurs
+    # ! = NOT NULL
+    id: PositiveInt!
+    username: String!
+    created_at: DateTime!
+    updated_at: DateTime
+    reviews: [Review!]!
+    favorites: [Favorite!]
+}
+
+"Les données d'inscription d'un utilisateur"
+input UserInput {
+    username: String!
+    email: EmailAddress!
+    password: String!
+}
+
+"Les informations privées d''un utilisateur"
+type UserConnected {
+    id: PositiveInt!
+    username: String!
+    email: EmailAddress!
+    token: Token
+    created_at: DateTime!
+    updated_at: DateTime
+    reviews: [Review!]!
+}
+
+# On peut indiquer de la documentation multi lignes:
+
+"""
+Le token comprends les informations utilisateur
+- username
+- email
+- ip
+"""
+type Token {
+    token: String!
+    expiresIn: String!
+}

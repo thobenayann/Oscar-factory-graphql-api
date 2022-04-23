@@ -1,0 +1,11 @@
+"Entier compris entre 1895 (data du premier film de l'histoire) et 2100"
+scalar Year
+
+"Adresse email standard"
+scalar EmailAddress
+
+"Format ISO 8601 d'un instant"
+scalar DateTime
+
+"Entier supérieur à 0"
+scalar PositiveInt

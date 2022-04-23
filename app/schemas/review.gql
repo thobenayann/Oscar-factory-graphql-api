@@ -1,0 +1,17 @@
+"Une critique de film"
+type Review {
+    id: PositiveInt!
+    rating: PositiveInt!
+    content: String
+    created_at: DateTime!
+    updated_at: DateTime
+    movie: Movie!
+    user: User!
+}
+
+"Données pour ajouter une critique de film"
+input ReviewInput {
+    rating: PositiveInt!
+    content: String
+    movie_id: PositiveInt!
+}

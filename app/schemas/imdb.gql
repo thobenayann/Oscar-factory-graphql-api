@@ -1,0 +1,42 @@
+type ImdbSearchItem {
+    Poster: String!
+    Title: String!
+    Type: String!
+    Year: String!
+    imdbID: ID!
+    movie: Movie
+}
+
+type ImdbRating {
+    Source: String!
+    Value: String!
+}
+
+type Imdb {
+    Title: String!
+    Year: String!
+    Rated: String!
+    Released: String!
+    Runtime: String!
+    Genre: String!
+    Director: String!
+    Writer: String!
+    Actors: String!
+    Plot: String!
+    Language: String!
+    Country: String!
+    Awards: String!
+    Poster: String!
+    Ratings: [ImdbRating]
+    Metascore: String!
+    imdbRating: String!
+    imdbVotes: String!
+    imdbID: ID!
+    Type: String!
+    DVD: String!
+    BoxOffice: String!
+    Production: String!
+    Website: String!
+    Response: String!
+    movie: Movie
+}

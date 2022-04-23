@@ -1,44 +1,436 @@
-################################################################################
-# Fichier de test des routes HTTP de l'API
-# Nécessite l'extension REST Client pour VSCode
-# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
-################################################################################
-@endpoint = http://localhost:4000/graphql
+@endpoint = http://localhost:{{$dotenv PORT}}/graphql
 
-### Requête de test
-# En graphQL on utilisera toujours la méthode POST
-# Car c'est dans la body qu'on lui fournira la requête graphQL
+### Inscription
+# @name signup
 POST {{ endpoint }}
 Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
 
-query {
-  getMovie
-}
-
-### Récupération de toutes les catégories
-POST {{ endpoint }}
-Content-Type: application/json
-X-REQUEST-TYPE: GraphQL
-query {
-  getAllCategories {
-      id
-      label
-      movies {
-          id
-          title
-      }
+mutation ($input: UserInput!) {
+  signup(input: $input) {
+    id
+    username
   }
 }
 
-### Récupération d'un film via son identifiant
+{
+    "input": {
+        "username": "michel",
+        "email": "michel@oclock.io",
+        "password": "superpass"
+    }
+}
+
+### Authentification
+# @name signin
 POST {{ endpoint }}
 Content-Type: application/json
 X-REQUEST-TYPE: GraphQL
 
-query {
-    getMovie(id: 1){
+query ($email: EmailAddress!, $password: String!) {
+  signin(email: $email, password: $password) {
+    token {
+        token
+        expiresIn
+    }
+  }
+}
+
+{
+	"email": "yann@oclock.io",
+	"password": "superpass"
+}
+
+###
+
+@authToken = {{signin.response.body.data.signin.token.token}}
+
+### Récupération de la liste des films
+POST {{ endpoint }}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query GetAllMovies{
+  getAllMovies {
+    id
+    title
+  }
+}
+
+### Récupération d'un film
+POST {{ endpoint }}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query GetMovie($id: PositiveInt!){
+  getMovie(id: $id) {
+    id
+    title
+    favorites{
+        user {
+            username
+        }
+    }
+    reviews {
+        rating
+        content
+        user {
+            username
+        }
+    }
+    categories {
+        label
+    }
+    imdb {
+        Poster
+        Ratings{
+            Source
+            Value
+        }
+    }
+  }
+}
+
+{
+    "id": 1
+}
+
+### Récupération de film par catégorie
+POST {{ endpoint }}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query GetMovieByCategory($category_id: PositiveInt!){
+  getMoviesByCategory(category_id: $category_id) {
+    id
+    title
+  }
+}
+
+{
+    "category_id": 2
+}
+
+
+### Récupération des critiques d'un utilisateur
+POST {{ endpoint }}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query GetReviewsByUser($user_id: PositiveInt!){
+  getReviewsByUser(user_id: $user_id) {
+    id
+    rating
+    content
+  }
+}
+
+{
+    "user_id": 8
+}
+
+### Récupération de la liste des catégories
+POST {{ endpoint }}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query GetAllCategories{
+  getAllCategories {
+    id
+    label
+  }
+}
+
+### Récupération d'une catégorie et de tous ses films
+POST {{ endpoint }}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query GetCategory($id: PositiveInt!){
+  getCategory(id: $id) {
+    id
+    label
+    movies{
         title
         description
+        reviews{
+            id
+            rating
+            content
+            user {
+                username
+            }
+        }
+    }
+  }
+}
+
+{
+    "id": 11
+}
+
+### Récupération la liste des films sur IMDB
+POST {{ endpoint }}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query searchImdb($searchTerm: String!){
+  searchImdb(searchTerm: $searchTerm) {
+    Poster
+    Title
+    imdbID
+    movie {
+        id
+        title
+        reviews {
+            id
+            user {
+                id
+                username
+            }
+            rating
+        }
+    }
+  }
+}
+
+{
+    "searchTerm": "Blade runner"
+}
+
+### Ajouter une film avec ses catégories
+POST {{ endpoint }}
+content-type: application/json
+Authorization: Bearer {{authToken}}
+X-REQUEST-TYPE: GraphQL
+
+mutation CreateMovie($input: MovieInput!) {
+  createMovie(input: $input) {
+    id
+    title
+    categories {
+        label
+    }
+  }
+}
+
+{
+    "input": {
+        "title": "La bonne soupe",
+        "description": "A middle-aged Frenchwoman (Marie Bell) regales a casino croupier (Claude Dauphin) with tales of her many complicated romances.",
+	    "image": "https://m.media-amazon.com/images/M/MV5BNTU2NjZhMGQtYzQ4Ny00YTI4LWFlNTMtZGVmMDM4ZmI4ODAxXkEyXkFqcGdeQXVyMjQzMzQzODY@._V1_SX300.jpg",
+        "release_year": 1984,
+        "imdb_id": "tt0056882",
+        "category_ids": [1,2]
+    }
+}
+
+
+
+### Ajouter une critique de film
+POST {{ endpoint }}
+content-type: application/json
+Authorization: Bearer {{authToken}}
+X-REQUEST-TYPE: GraphQL
+
+mutation CreateReview($input: ReviewInput!) {
+  createReview(input: $input) {
+    id
+    rating
+    content
+    user{
+        username
+    }
+  }
+}
+
+{
+    "input": {
+        "rating": 2,
+        "content": "lorem ipsum",
+        "movie_id": 1
+    }
+}
+
+### Première requête exploitant la puissance de GraphQL
+### En faisant une double requête, qui va nous retourner un objet fusionné
+POST {{ endpoint }}
+content-type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query GetCategory($id1: PositiveInt!, $id2: PositiveInt!){
+  id1: getCategory(id: $id1) {
+    id
+    label
+    movies{
+        id
+        title
+        reviews{
+            id
+            rating
+            content
+            user{
+                id
+                username
+            }
+        }
+    }
+  }
+  id2: getCategory(id: $id2) {
+    id
+    label
+    movies{
+        id
+        title
+        reviews{
+            id
+            rating
+            content
+            user{
+                id
+                username
+            }
+        }
+    }
+  }
+}
+
+{
+    "id1": 11,
+    "id2": 69
+}
+
+### Grosse requête GQL qui demande beaucoup de requêtes SQL
+### Sans cache et dataloader: ~250 queries
+### Avec cache:
+###     - cache non crée:             ~250 requêtes SQL
+###     - cache existant :            0 requêtes SQL
+### Avec dataloader et cache:
+###     - cache non crée:             4 requêtes SQL
+###     - cache existant:             0 requêtes SQL
+POST {{ endpoint }}
+content-type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query GetAllMovies{
+  getAllMovies {
+    id
+    title
+    release_year
+    categories{
+        id
+        label
+    },
+    reviews{
+        id
+        rating
+        content
+        user{
+            id
+            username
+        }
+    }
+  }
+}
+
+### Test type scalar Year
+POST {{ endpoint }}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query EchoYear($year: Year!){
+  echoYear(year: $year)
+}
+
+{
+    "year": 2000
+}
+
+
+### Test type scalar 2 Year
+POST {{ endpoint }}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query{
+  echoYear(year: 2000)
+}
+
+
+### Test de profondeur
+POST {{ endpoint }}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query evil {
+    getAllCategories{
+        label
+        movies{
+            title
+            categories {
+                label
+                movies {
+                    title
+                    categories {
+                        label
+                        movies {
+                            title
+                            categories {
+                                label
+                                movies {
+                                    title
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+### Ajout dans mes favoris
+POST {{ endpoint }}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+X-REQUEST-TYPE: GraphQL
+
+mutation {
+    addToMyFavorites(movie_id: 2) {
+        id
+        title
+    }
+}
+
+### Récupération de mes favoris
+POST {{ endpoint }}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+X-REQUEST-TYPE: GraphQL
+
+query {
+    getMyFavoriteMovies {
+        id
+        title
+    }
+}
+
+
+### Récupération de tous les favoris
+POST {{ endpoint }}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+X-REQUEST-TYPE: GraphQL
+
+query {
+    getAllFavorites {
+        movie{
+            id
+            title
+        }
+        user{
+            id
+            username
+        }
     }
 }

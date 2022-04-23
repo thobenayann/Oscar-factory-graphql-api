@@ -1,12 +1,24 @@
+"Un film sélectionné"
 type Movie {
-    id: Int!
+    id: PositiveInt!
     image: String!
     title: String!
     description: String
-    release_year: Int!
-    directors: String
-    countries: String
+    release_year: Year!
+    created_at: DateTime!
+    updated_at: DateTime
+    imdb: Imdb!
+    categories: [Category!]!
+    reviews(asc: Boolean = false): [Review!]!
+    favorites: [Favorite!]
+}
+
+"Données pour ajouter un film à sélection"
+input MovieInput {
+    image: String!
+    title: String!
+    description: String
+    release_year: Year!
     imdb_id: String!
-    created_at: String!
-    updated_at: String
+    category_ids: [Int!]!
 }
