@@ -15,3 +15,30 @@ X-REQUEST-TYPE: GraphQL
 query {
   getMovie
 }
+
+### Récupération de toutes les catégories
+POST {{ endpoint }}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+query {
+  getAllCategories {
+      id
+      label
+      movies {
+          id
+          title
+      }
+  }
+}
+
+### Récupération d'un film via son identifiant
+POST {{ endpoint }}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+    getMovie(id: 1){
+        title
+        description
+    }
+}

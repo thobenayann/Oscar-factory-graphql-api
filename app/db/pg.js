@@ -9,13 +9,14 @@
  * continuera de fonctionner
  *
  * Comme pour Client les informations de connexion
- * sont lu soit directement à partir de l'env soit donnée en paramêtre
+ * sont lues soit directement à partir de l'env soit données en paramêtre
  */
 const debug = require('debug')('SQL:log');
 const { Pool } = require('pg');
 
 // In my case i use a specific pg port for my db usage
-const pool = new Pool({ port: 5433 });
+// PGPORT in my env file
+const pool = new Pool();
 
 module.exports = {
     // On expose quand même le client original "au cas ou"

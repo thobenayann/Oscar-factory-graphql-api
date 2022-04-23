@@ -1,0 +1,14 @@
+# Afin de definir un type complexe on utilise le mot clé "type"
+# Celui-ci est interprété par le serveur GraphQL
+# Ce type sera alors accessible dans l'ensemble du schema en tant que nouveau type.
+type Category {
+    # Dans la définition d'un type complexe
+    # - On précise la liste des propriété de cette entité
+    # - Le type des ces propriétés
+    # - Ainsi que l'obligation de présence des ceux-ci avec le signe ! juste après le type
+    id: Int!
+    label: String!
+    created_at: String!
+    updated_at: String
+    movies: [Movie]
+}

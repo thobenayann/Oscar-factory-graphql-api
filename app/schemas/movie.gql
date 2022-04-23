@@ -1,0 +1,12 @@
+type Movie {
+    id: Int!
+    image: String!
+    title: String!
+    description: String
+    release_year: Int!
+    directors: String
+    countries: String
+    imdb_id: String!
+    created_at: String!
+    updated_at: String
+}
