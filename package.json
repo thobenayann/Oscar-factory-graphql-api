@@ -1,0 +1,26 @@
+{
+  "name": "oscar-factory-graphql-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "@powershell $env:DEBUG='*,-nodemon*,-express*,-body-parser*'; npx nodemon -e js,gql"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thobenayann/Oscar-factory-graphql-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thobenayann/Oscar-factory-graphql-api/issues"
+  },
+  "homepage": "https://github.com/thobenayann/Oscar-factory-graphql-api#readme",
+  "dependencies": {
+    "apollo-server": "^3.6.7",
+    "debug": "^4.3.4",
+    "dotenv": "^16.0.0",
+    "pg": "^8.7.3"
+  }
+}

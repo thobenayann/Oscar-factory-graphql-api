@@ -1,0 +1,17 @@
+################################################################################
+# Fichier de test des routes HTTP de l'API
+# Nécessite l'extension REST Client pour VSCode
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+################################################################################
+@endpoint = http://localhost:4000/graphql
+
+### Requête de test
+# En graphQL on utilisera toujours la méthode POST
+# Car c'est dans la body qu'on lui fournira la requête graphQL
+POST {{ endpoint }}
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+  getMovie
+}
