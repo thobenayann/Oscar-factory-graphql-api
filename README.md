@@ -1,6 +1,6 @@
 # Oscar-factory-graphql-api
 
-![logo](./assets/images/logo_oscar-factory.png)
+![logo](./assets/images/logo-oscar-factory.svg)
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -64,7 +64,8 @@ Cette API graphql consomme à la fois les données d'une BDD postgres mais égal
 Si vous avez configuré un utilisateur par défaut vous pouvez utiliser `npm run initDB`.
 
 Sinon créez votre BDD avec le nom `oscar-factory-db` et lancez le script `npm run resetDB`.<br/>
-(attention, ce script est adapté pour un OS windows, il doit être légèrement réajusté pour un autre OS comme linux)
+(attention, ce script est adapté pour un OS windows, il doit être légèrement réajusté pour un autre OS comme linux)<br/>
+Vous pouvez voir un example ici :point_right: [script-linux](script-linux.md)
 
 Si votre environnement ne vous permet pas d'exécuter la commande, passez en utilisateur `postgres` grâce à la commande `sudo -i -u postgres`
 
@@ -72,7 +73,7 @@ Si votre environnement ne vous permet pas d'exécuter la commande, passez en uti
 
 ## Lancement de l'API
 
-`npm run dev`
+`npm run devDataloader`
 
 ## Documentation
 
