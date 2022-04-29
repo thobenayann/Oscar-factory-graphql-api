@@ -73,7 +73,7 @@ module.exports = {
 
     async addToMyFavorites(_, args, { dataSources, user }) {
         if (!user) {
-            throw new AuthenticationError('You must be authenticate to add a review');
+            throw new AuthenticationError('You must be authenticate to add a favorite');
         }
 
         const movie = await dataSources.movie.findByPk(args.movie_id);
@@ -92,6 +92,30 @@ module.exports = {
         }
 
         await dataSources.favorite.insert({ ...args, user_id: user.id });
+        return movie;
+    },
+
+    async removeToMyFavorites(_, args, { dataSources, user }) {
+        if (!user) {
+            throw new AuthenticationError('You must be authenticate to remove a favorite');
+        }
+
+        const movie = await dataSources.movie.findByPk(args.movie_id);
+
+        if (!movie) {
+            throw new UserInputError(`No movie with the id : ${args.movie_id}`);
+        }
+
+        const favorites = await dataSources.favorite.findAll({
+            user_id: user.id,
+            movie_id: args.movie_id,
+        });
+
+        if (!favorites.length) {
+            throw new UserInputError('User hasn\'t this movie in his favorite list');
+        }
+
+        await dataSources.favorite.delete(favorites[0].id);
         return movie;
     },
 };

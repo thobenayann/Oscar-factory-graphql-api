@@ -70,9 +70,9 @@ module.exports = {
     },
 
     getMyFavoriteMovies(_, __, { dataSources, user }) {
-        if (!user) {
-            throw new AuthenticationError('You must be authenticate to get your favorites');
-        }
+        // if (!user) {
+        //     throw new AuthenticationError('You must be authenticate to get your favorites');
+        // }
         return dataSources.movie.findFavoriteMoviesByUser(user.id);
     },
 
