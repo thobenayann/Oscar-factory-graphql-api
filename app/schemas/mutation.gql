@@ -13,4 +13,6 @@ type Mutation {
     createReview(input: ReviewInput): Review
 
     addToMyFavorites(movie_id: PositiveInt): Movie
+
+    removeToMyFavorites(movie_id: PositiveInt): Movie
 }
