@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "initDB": "dropdb -U postgres -p 5433 oscar-factory-db; createdb -U postgres -p 5433 oscar-factory-db; npm run resetDB",
-    "resetDB": "psql -U postgres -p 5433 -d oscar-factory-db -f ./data/structure.sql; psql -U postgres -p 5433 -d oscar-factory-db -f ./data/migration_favorite.sql; psql -U postgres -p 5433 -d oscar-factory-db -f ./data/data.sql; @powershell $env:DEBUG=seeding node data/generateMovieSeeding.js",
-    "dev": "@powershell $env:DEBUG='*,-nodemon*,-express*,-body-parser*'; npx nodemon -e js,gql",
-    "devCache": "@powershell $env:DEBUG=*,-express*,-body-parser*,-nodemon* CACHE_ENABLED=true npx nodemon --ext 'js,gql'",
-    "devDataloader": "@powershell $env:DEBUG='*,-express*,-body-parser*,-nodemon* DATALOADER_ENABLED=true'; npx nodemon --ext 'js,gql'",
-    "devBase": "@powershell $env:DEBUG=*,-express*,-body-parser*,-nodemon* npx nodemon --ext 'js,gql'",
+    "start": "node .",
+    "initDB": "dropdb -U postgres oscar_factory; createdb -U postgres oscar_factory; npm run resetDB",
+    "resetDB": "psql -U postgres -d oscar_factory -f ./data/structure.sql; psql -U postgres -d oscar_factory -f ./data/migration_favorite.sql; psql -U postgres -d oscar_factory -f ./data/data.sql; DEBUG=seeding node data/generateMovieSeeding.js",
+    "dev": "DEBUG=*,-express*,-body-parser*,-nodemon* CACHE_ENABLED=true DATALOADER_ENABLED=true npx nodemon --ext 'js,gql'",
+    "devCache": "DEBUG=*,-express*,-body-parser*,-nodemon* CACHE_ENABLED=true npx nodemon --ext 'js,gql'",
+    "devDataloader": "DEBUG=*,-express*,-body-parser*,-nodemon* DATALOADER_ENABLED=true npx nodemon --ext 'js,gql'",
+    "devBase": "DEBUG=*,-express*,-body-parser*,-nodemon* npx nodemon --ext 'js,gql'",
     "format": "npx prettier --write ."
   },
   "repository": {
@@ -38,6 +39,7 @@
     "graphql-depth-limit": "^1.1.0",
     "graphql-scalars": "^1.17.0",
     "jsonwebtoken": "^8.5.1",
+    "knex": "^2.0.0",
     "pg": "^8.7.3"
   },
   "devDependencies": {
