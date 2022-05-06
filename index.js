@@ -8,5 +8,6 @@ const PORT = process.env.PORT ?? 4000;
 const server = new ApolloServer(app);
 
 server.listen(PORT).then(({ url }) => {
-    debug(`Server ready at ${url}`);
+    debug(`🚀  Server is ready at ${url}
+📭  Query at https://studio.apollographql.com/dev`);
 });
