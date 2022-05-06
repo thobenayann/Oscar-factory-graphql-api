@@ -1,5 +1,5 @@
 const { UserInputError, AuthenticationError } = require('apollo-server');
-import { ApolloServerPluginUsageReportingDisabled } from "apollo-server-core";
+const { ApolloServerPluginUsageReportingDisabled } = require('apollo-server-core');
 const depthLimit = require('graphql-depth-limit');
 
 const db = require('./db/pg');
