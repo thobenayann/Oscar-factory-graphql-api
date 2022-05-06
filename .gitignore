@@ -17,8 +17,8 @@ node_modules
 *.gz
 
 #log
-logs/*
-!logs/.empty
+log/*
+!log/.empty
 
 #vscode
 .vs_code/
