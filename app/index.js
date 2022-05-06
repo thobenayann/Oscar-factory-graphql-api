@@ -1,4 +1,5 @@
 const { UserInputError, AuthenticationError } = require('apollo-server');
+import { ApolloServerPluginUsageReportingDisabled } from "apollo-server-core";
 const depthLimit = require('graphql-depth-limit');
 
 const db = require('./db/pg');
@@ -52,7 +53,9 @@ module.exports = {
         }
         return err.message;
     },
+    csrfPrevention: true,
     plugins: [
+        ApolloServerPluginUsageReportingDisabled(),
         {
             async requestDidStart() {
                 db.queryCount = 0;
