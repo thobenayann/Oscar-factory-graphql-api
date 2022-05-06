@@ -60,4 +60,6 @@ module.exports = {
         },
     ],
     validationRules: [depthLimit(5)],
+    introspection: true, // allow introspection for production
+    playground: true, // allow playground for production
 };
